@@ -5,16 +5,16 @@
 #SBATCH --account=mpsnyder
 #SBATCH --time=24:00:00
 #SBATCH --mem-per-cpu=20G
-#SBATCH --array=0-10
+#SBATCH --array=0-100
 #SBATCH --output=/labs/mpsnyder/khoa/logs/genomad2/genomad_%A_%a.out
 #SBATCH --error=/labs/mpsnyder/khoa/logs/genomad2/genomad_%A_%a.err
-
+eval "$(/labs/mpsnyder/khoa/envs/micromamba/bin/micromamba shell hook --shell=bash)"
 micromamba activate genomad
 # Directories
-DATA_DIR="/labs/mpsnyder/khoa/data/prophage-DB/bacterial_host_prophages/"
-OUTPUT_DIR="/labs/mpsnyder/khoa/data/prophage-DB/annotations_genomad_PROGS_oneint/"
+#DATA_DIR="/labs/mpsnyder/khoa/data/prophage-DB/bacterial_host_prophages/"
+OUTPUT_DIR="/labs/mpsnyder/khoa/data/virome/genomad_outs" #"/labs/mpsnyder/khoa/data/prophage-DB/annotations_genomad_PROGS_oneint/"
 DB_DIR="/labs/mpsnyder/khoa/data/genomad_db"
-FASTA_FILES="/labs/mpsnyder/khoa/data/prophage-DB/int_high_quality_complete_sample800.txt"
+FASTA_FILES="/labs/mpsnyder/khoa/data/virome/ncbi_dataset/genomic_fna_list.txt" #"/labs/mpsnyder/khoa/data/prophage-DB/int_high_quality_complete_sample800.txt"
 # Use SLURM_ARRAY_TASK_COUNT for the number of parallel jobs
 NUM_JOBS=${SLURM_ARRAY_TASK_COUNT}
 
@@ -46,8 +46,16 @@ for (( i=0; i<total_files; i++ )); do
 
     echo "Processing file index $i: $input_file"
 
-    genomad annotate \
-         "$input_file" \
-         "$output_path" \
-         "$DB_DIR" 
+    # genomad annotate \
+    #      "$input_file" \
+    #      "$output_path" \
+    #      "$DB_DIR" 
+
+    genomad end-to-end \
+            "$input_file" \
+            "$output_path" \
+            "$DB_DIR" \
+            --relaxed \
+            --threads 8 \
+
 done
