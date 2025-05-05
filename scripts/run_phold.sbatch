@@ -6,16 +6,16 @@
 #SBATCH --time=24:00:00
 #SBATCH --mem-per-cpu=5G
 #SBATCH --array=0-10
-#SBATCH --output=/labs/mpsnyder/khoa/logs/phold/phold_%A_%a.out
-#SBATCH --error=/labs/mpsnyder/khoa/logs/phold/phold_%A_%a.err
+#SBATCH --output=logs/phold/phold_%A_%a.out
+#SBATCH --error=logs/phold/phold_%A_%a.err
 
-eval "$(/labs/mpsnyder/khoa/envs/micromamba/bin/micromamba shell hook --shell=bash)"
+eval "$($SCRATCH/envs/micromamba/bin/micromamba shell hook --shell=bash)"
 micromamba activate phold
 # Directories
-DATA_DIR="/labs/mpsnyder/khoa/data/prophage-DB/bacterial_host_prophages/"
-OUTPUT_DIR="/labs/mpsnyder/khoa/data/prophage-DB/annotations_phold_GENOMAD_noint"
-# DB_DIR="/labs/mpsnyder/khoa/data/genomad_db"
-FASTA_FILES="/labs/mpsnyder/khoa/data/prophage-DB/no_int_high_quality_complete_genomad.txt"
+DATA_DIR="$SCRATCH/data/prophage-DB/bacterial_host_prophages/"
+OUTPUT_DIR="$SCRATCH/data/prophage-DB/annotations_phold_GENOMAD_noint"
+# DB_DIR="$SCRATCH/data/genomad_db"
+FASTA_FILES="$SCRATCH/data/prophage-DB/no_int_high_quality_complete_genomad.txt"
 # Use SLURM_ARRAY_TASK_COUNT for the number of parallel jobs
 NUM_JOBS=${SLURM_ARRAY_TASK_COUNT}
 

@@ -6,14 +6,14 @@
 #SBATCH --time=12:00:00
 #SBATCH --mem-per-cpu=5G
 #SBATCH --array=0-49
-#SBATCH --output=/labs/mpsnyder/khoa/logs/pharokka/pharokka_%A_%a.out
-#SBATCH --error=/labs/mpsnyder/khoa/logs/pharokka/pharokka_%A_%a.err
+#SBATCH --output=logs/pharokka/pharokka_%A_%a.out
+#SBATCH --error=logs/pharokka/pharokka_%A_%a.err
 
 # Directories
-DATA_DIR="/labs/mpsnyder/khoa/data/prophage-DB/bacterial_host_prophages/"
-OUTPUT_DIR="/labs/mpsnyder/khoa/data/prophage-DB/annotations/"
-DB_DIR="/labs/mpsnyder/khoa/data/pharokka_v1.4.0_databases"
-LYSOGEN_FILES="/labs/mpsnyder/khoa/data/prophage-DB/lysogen.txt"
+DATA_DIR="$SCRATCH/data/prophage-DB/bacterial_host_prophages/"
+OUTPUT_DIR="$SCRATCH/data/prophage-DB/annotations/"
+DB_DIR="$SCRATCH/data/pharokka_v1.4.0_databases"
+LYSOGEN_FILES="$SCRATCH/data/prophage-DB/lysogen.txt"
 # Use SLURM_ARRAY_TASK_COUNT for the number of parallel jobs
 NUM_JOBS=${SLURM_ARRAY_TASK_COUNT}
 

@@ -9,8 +9,16 @@
 #SBATCH --output=logs/%j.out
 #SBATCH --mem=8GB
 
+### 
+### Load the required modules
+eval "$($SCRATCH/envs/micromamba/bin/micromamba shell hook --shell=bash)"
+micromamba activate ncbi_dataset
 
+###
+### Download NCBI datasets
+input_file=$1
+output_file=$2
 datasets download genome accession \
-  --inputfile selected_bacteria.txt \
+  --inputfile $input_file \
   --include genome,gff3,gtf,cds,protein,rna \
-  --filename bacterial_genomes.zip
+  --filename $output_file 
