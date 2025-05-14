@@ -12,9 +12,7 @@ X_scaled32 = X_scaled.astype('float32').to_dask_array(lengths=True)
 
 n_rows, n_cols = X_scaled32.shape
 X_scaled32 = X_scaled32.rechunk((2000, n_cols))
-id_arr = df['id'] \
-    .to_dask_array(lengths=True) \
-    .rechunk((2000,))
+# Removed unused variable `id_arr`.
 
 da.to_hdf5(
     'dna_features.h5',
