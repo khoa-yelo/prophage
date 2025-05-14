@@ -185,9 +185,10 @@ def main():
     args = p.parse_args()
 
     writer = None
-    for rid, seq in parse_fasta(open(args.fasta)):
-        feats = {}
-        feats["id"] = rid
+    with open(args.fasta) as fasta_file:
+        for rid, seq in parse_fasta(fasta_file):
+            feats = {}
+            feats["id"] = rid
         feats.update(basic_features(seq))
         feats.update(kmer_freq(seq, k=args.kmer_k))
         feats.update(pseknc(seq, k=args.kmer_k,
