@@ -11,26 +11,27 @@ Date: 05/04/2025
 import h5py
 import pandas as pd
 
-class ProteinEmbedding:
+class ProteinEmbeddings:
     def __init__(self, embeddings_path, cluster_map_path):
         self.embeddings_path = embeddings_path
         self.cluster_map_path = cluster_map_path
+        self.protein_ids = None
         self.cluster_map = self.load_map(self.cluster_map_path)
         self.mean_embeddings = None
         self.max_embeddings = None
         self.mean_middle_embeddings = None
         self.max_middle_embeddings = None
         self.protein_cluster_ids = None
-        self.protein_ids = None
         self.id_embedding_map = None
         self.load_embeddings(self.embeddings_path)
+        self.embedding_dim = self.mean_middle_embeddings.shape[1]
 
     def load_map(self, protein_ids_map):
         df_map = pd.read_csv(protein_ids_map, sep="\t", header=None)
         df_map.columns = ["protein_cluster", "protein_id"]
-        map = df_map.set_index("protein_id").to_dict()["protein_cluster"]
+        cluster_map = df_map.set_index("protein_id").to_dict()["protein_cluster"]
         self.protein_ids = df_map["protein_id"].tolist()
-        return map
+        return cluster_map
     
     def load_embeddings(self, embeddings_path):
         with h5py.File(embeddings_path, "r") as hf:
@@ -50,7 +51,7 @@ class ProteinEmbedding:
         return protein_indices
     
 
-    def get_embeddings(self, protein_ids, metric = "mean"):
+    def get_embeddings(self, protein_ids, metric = "mean_middle"):
         if isinstance(protein_ids, str):
             protein_ids = [protein_ids]
         indices = self.get_protein_indices(protein_ids)

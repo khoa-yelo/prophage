@@ -30,3 +30,16 @@ with h5py.File('dna_features.h5', 'a') as f:
         data=id_list,
         dtype=str_dt
     )
+    
+cds_header = "/orange/sai.zhang/khoa/repos/prophage/data/cds_header.csv"
+df_cds = pd.read_csv(cds_header, sep = "\t", header = None)
+df_cds.columns = ["id", "feat_id"]
+id_map = df_cds.set_index("id").to_dict()["feat_id"]
+with h5py.File('dna_features.h5', "r+") as f:
+    print(len(f["id"][...]))
+    str_dt = h5py.string_dtype(encoding='utf-8')
+    feat_ids = []
+    for id_ in f["id"][...]:
+        feat_ids.append(str(id_map.get(id_.decode())))
+    del f["feat_ids"]
+    f.create_dataset("feat_ids", data=feat_ids, dtype = str_dt)
