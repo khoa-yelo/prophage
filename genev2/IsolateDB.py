@@ -145,8 +145,9 @@ class IsolateDB:
         df = pd.read_sql_query(query, self.conn, params=(record_id,))
         if df.empty:
             return {}
-        
-        df['species_prev'] = df['species_prev'].fillna(0.) 
+
+        df['species_prev'] = df['species_prev'].fillna(0.)
+        df['homologs'] = df['homologs'].fillna(0.) 
         df['product'] = df['product'].fillna("") 
     
         return {
